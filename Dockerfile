@@ -21,3 +21,5 @@ RUN yes | sdkmanager --licenses && \
 RUN git clone https://github.com/flutter/flutter.git -b stable ${FLUTTER_HOME} && \
  flutter doctor -v
 WORKDIR /workspace
+COPY pubspec.yaml pubspec.lock* ./
+RUN flutter pub get

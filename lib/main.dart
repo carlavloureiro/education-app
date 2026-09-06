@@ -2,8 +2,9 @@
 import 'models/nivel_dificuldade.dart';
 import 'models/questao.dart';
 import 'services/gerenciador_quiz.dart';
+import 'services/database_helper.dart';
 
-void main() {
+void main() async {
   print('====================================================');
   print('🎓 FACULDADE MULTIVIX - SISTEMAS DE INFORMAÇÃO');
   print('📱 COMPUTAÇÃO MÓVEL 2026/2 - AVALIAÇÃO PROCESSUAL 1');
@@ -44,12 +45,32 @@ void main() {
   };
   final q3 = QuestaoMultiplaEscolha.fromMap(dadosJson);
 
-  // Cadastrando as questões no gerenciador
+  // Cadastrando as questões no gerenciador em memória
   gerenciador.cadastrarQuestao(q1);
   gerenciador.cadastrarQuestao(q2);
   gerenciador.cadastrarQuestao(q3);
 
-  print('   -> Questões carregadas no banco de memória com sucesso.\n');
+  print('   -> 3 questões criadas e carregadas na memória com sucesso.\n');
+
+  // -----------------------------------------------------------
+  // PERSISTÊNCIA LOCAL RELACIONAL (SQLite via FFI)
+  // -----------------------------------------------------------
+  print('📦 [SQLITE] Demonstrando persistência local em banco relacional...');
+  DatabaseHelper.inicializarFfi();
+
+  // Gravando no SQLite
+  await DatabaseHelper.inserirQuestao(q1);
+  await DatabaseHelper.inserirQuestao(q2);
+  await DatabaseHelper.inserirQuestao(q3);
+  print('   -> Questões gravadas com sucesso no arquivo local "quiz_app.db"!');
+
+  // Recuperando do SQLite
+  final questoesDoBanco = await DatabaseHelper.buscarTodasQuestoes();
+  print('   -> Total de questões recuperadas do SQLite: ${questoesDoBanco.length}');
+  for (var q in questoesDoBanco) {
+    print('      • [${q.id}] ${q.enunciado} (${q.pontos} pts)');
+  }
+  print('');
 
   // -----------------------------------------------------------
   // 2. MANIPULAÇÃO FUNCIONAL DE COLEÇÕES (Requisito 3)
@@ -81,9 +102,9 @@ void main() {
   print('\n   [Pergunta 3] Respondendo: "Set"');
   gerenciador.processarResposta(q3, 'Set');
 
-  // Simulação de restrição móvel (ex.: modo offline / persistência local em cache)
+  // Simulação de restrição móvel (offline-first / persistência local em cache)
   print('\n   [RESTRIÇÃO MÓVEL]: Sincronização offline-first');
-  print('   -> Todas as respostas e pontuações foram retidas localmente em memória.');
+  print('   -> Todas as respostas e pontuações foram retidas localmente em memória e SQLite.');
 
   // -----------------------------------------------------------
   // 4. RELATÓRIO FORMATADO NO TERMINAL (Requisito 4)
