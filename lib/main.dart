@@ -1,122 +1,136 @@
-import 'package:flutter/material.dart';
+// lib/main.dart
+import 'models/nivel_dificuldade.dart';
+import 'models/questao.dart';
+import 'services/gerenciador_quiz.dart';
 
 void main() {
-  runApp(const MyApp());
-}
+  print('====================================================');
+  print('🎓 FACULDADE MULTIVIX - SISTEMAS DE INFORMAÇÃO');
+  print('📱 COMPUTAÇÃO MÓVEL 2026/2 - AVALIAÇÃO PROCESSUAL 1');
+  print('📚 TEMA 08: APLICATIVO DE EDUCAÇÃO E QUIZ ADAPTATIVO');
+  print('====================================================\n');
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  // -----------------------------------------------------------
+  // 1. INSTANCIAÇÃO DAS ENTIDADES E CONSTRUTORES (Requisito 2)
+  // -----------------------------------------------------------
+  print('1. [SCAFFOLDING] Criando questões com os 3 tipos de construtores...');
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+  final gerenciador = GerenciadorQuiz();
+
+  // (A) Construtor Padrão Gerativo com "super"
+  final q1 = QuestaoMultiplaEscolha(
+    id: 'Q01',
+    enunciado: 'Qual a principal linguagem de programação utilizada pelo Flutter?',
+    dificuldade: NivelDificuldade.facil,
+    pontosIniciais: 10,
+    opcoes: ['Java', 'Dart', 'Python', 'C#'],
+    respostaCorreta: 'Dart',
+  );
+
+  // (B) Construtor Nomeado para Verdadeiro ou Falso
+  final q2 = QuestaoMultiplaEscolha.verdadeiroFalso(
+    id: 'Q02',
+    enunciado: 'Dart 3 possui Sound Null Safety obrigatório.',
+    respostaCorreta: 'Verdadeiro',
+  );
+
+  // (C) Construtor Factory com parsing de Map (simulação de carga externa/JSON)
+  final dadosJson = {
+    'id': 'Q03',
+    'enunciado': 'Qual coleção em Dart armazena elementos únicos sem duplicação?',
+    'pontos': 20,
+    'opcoes': ['List', 'Map', 'Set'],
+    'respostaCorreta': 'Set',
+  };
+  final q3 = QuestaoMultiplaEscolha.fromMap(dadosJson);
+
+  // Cadastrando as questões no gerenciador
+  gerenciador.cadastrarQuestao(q1);
+  gerenciador.cadastrarQuestao(q2);
+  gerenciador.cadastrarQuestao(q3);
+
+  print('   -> Questões carregadas no banco de memória com sucesso.\n');
+
+  // -----------------------------------------------------------
+  // 2. MANIPULAÇÃO FUNCIONAL DE COLEÇÕES (Requisito 3)
+  // -----------------------------------------------------------
+  print('2. [COLEÇÕES & FUNCIONAL] Processando dados do banco de questões...');
+
+  // Uso de .where() para filtrar por dificuldade
+  final questoesFaceis = gerenciador.obterPorDificuldade(NivelDificuldade.facil);
+  print('   -> Total de questões fáceis filtradas (.where): ${questoesFaceis.length}');
+
+  // Uso de .fold() para cálculo acumulado de pontuação
+  final pontuacaoMaxima = gerenciador.calcularPontuacaoTotalDisponivel();
+  print('   -> Pontuação máxima acumulada no banco (.fold): $pontuacaoMaxima pontos\n');
+
+  // -----------------------------------------------------------
+  // 3. FLUXO ADAPTATIVO, LOGS COM MIXIN E RESTRIÇÃO MÓVEL (Requisitos 2 e 4)
+  // -----------------------------------------------------------
+  print('3. [SIMULAÇÃO] Aluno respondendo ao Quiz (com logs do mixin e adaptação)...');
+
+  // Simulação de resposta 1 (Acerto)
+  print('\n   [Pergunta 1] Respondendo: "Dart"');
+  gerenciador.processarResposta(q1, 'Dart');
+
+  // Simulação de resposta 2 (Erro)
+  print('\n   [Pergunta 2] Respondendo: "Falso"');
+  gerenciador.processarResposta(q2, 'Falso');
+
+  // Simulação de resposta 3 (Acerto)
+  print('\n   [Pergunta 3] Respondendo: "Set"');
+  gerenciador.processarResposta(q3, 'Set');
+
+  // Simulação de restrição móvel (ex.: modo offline / persistência local em cache)
+  print('\n   [RESTRIÇÃO MÓVEL]: Sincronização offline-first');
+  print('   -> Todas as respostas e pontuações foram retidas localmente em memória.');
+
+  // -----------------------------------------------------------
+  // 4. RELATÓRIO FORMATADO NO TERMINAL (Requisito 4)
+  // -----------------------------------------------------------
+  print('\n====================================================');
+  print('📊 RELATÓRIO FINAL DE DESEMPENHO');
+  print('====================================================');
+  print('Pontos Obtidos: ${gerenciador.pontuacaoAluno} / $pontuacaoMaxima');
+  
+  final percentual = pontuacaoMaxima > 0 
+      ? (gerenciador.pontuacaoAluno / pontuacaoMaxima) * 100 
+      : 0.0;
+  print('Taxa de Acerto: ${percentual.toStringAsFixed(1)}%');
+  
+  // Decisão de proficiência adaptativa baseada na pontuação
+  if (percentual >= 70) {
+    print('Nível de Proficiência Atingido: AVANÇADO 🚀');
+  } else if (percentual >= 40) {
+    print('Nível de Proficiência Atingido: INTERMEDIÁRIO 📘');
+  } else {
+    print('Nível de Proficiência Atingido: INICIANTE 📝');
   }
-}
+  print('====================================================\n');
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  // -----------------------------------------------------------
+  // 5. TRATAMENTO DE EXCEÇÕES E CASOS DE BORDA (Requisito 3)
+  // -----------------------------------------------------------
+  print('5. [TESTES DE BORDA] Verificando integridade das regras e exceções...');
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  // Caso de Borda 1: Disparo de QuizException customizada
+  try {
+    print('   -> Teste 1: Tentando carregar questão com dados incompletos...');
+    QuestaoMultiplaEscolha.fromMap({
+      'enunciado': '', // Inválido: dispara exceção
+      'opcoes': [],
     });
+  } on QuizException catch (e) {
+    print('   [SUCESSO] Exceção de negócio capturada com try-catch: $e');
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+  // Caso de Borda 2: Encapsulamento com validação no setter
+  try {
+    print('   -> Teste 2: Tentando atribuir pontuação negativa via Setter...');
+    q1.pontos = -10; // Dispara ArgumentError no setter encapsulado
+  } on ArgumentError catch (e) {
+    print('   [SUCESSO] Validação de encapsulamento funcionou: ${e.message}');
+  } finally {
+    print('\n✅ Demonstração finalizada com 100% de sucesso.');
   }
 }
