@@ -41,6 +41,38 @@ root@dba1c1db2c8b:/workspace# flutter doctor -v
 
 ## Estruturação do Repositório Git
 
+### Estrutura do Projeto
+
+O projeto adota uma arquitetura em camadas modular e desacoplada em Dart puro, separando as entidades de domínio, a camada de serviços/persistência e o executável de demonstração em console:
+
+```text
+education_app/
+├── .devcontainer/                # Configurações do ambiente de desenvolvimento integrado (VS Code)
+│   └── devcontainer.json
+├── .gitignore                    # Regras de exclusão de artefatos de build, caches e arquivos de IDE
+├── Dockerfile                    # Receita do contêiner reproduzível (Ubuntu 22.04, JDK 17, Flutter SDK)
+├── ENVIRONMENT_REPORT.md         # Diagnóstico do ambiente (flutter doctor -v) e justificativas do Git
+├── README.md                     # Documentação técnica oficial e declaração obrigatória de IA
+├── ROTEIRO_APRESENTACAO.md       # Guia e roteiro de apresentação com divisão de falas por integrante
+├── analysis_options.yaml         # Regras estáticas do linter oficial (flutter_lints)
+├── pubspec.yaml                  # Metadados do projeto, dependências (SQLite FFI, path) e SDK
+├── quiz_app.db                   # Banco de dados relacional SQLite local em disco (Offline-first)
+│
+├── lib/
+│   ├── main.dart                 # Ponto de entrada da aplicação e CLI Test Runner (5 etapas)
+│   │
+│   ├── models/                   # Camada de Domínio (Entidades, Contratos e Regras Base)
+│   │   ├── nivel_dificuldade.dart # Enum tipado com os níveis (fácil, médio, difícil) e parsers
+│   │   └── questao.dart          # Classe abstrata Questao, QuestaoMultiplaEscolha,
+│   │                             # LogAuditoriaMixin e QuizException
+│   │
+│   └── services/                 # Camada de Serviços, Lógica de Negócios e Persistência Local
+│       ├── database_helper.dart  # Conexão SQLite (sqflite_common_ffi), DDL e operações CRUD
+│       └── gerenciador_quiz.dart # Motor do quiz com coleções funcionais (.where e .fold)
+│
+└── test/                         # Diretório de testes automatizados
+```
+
 ### Itens ignorados
 
 - **`.dart_tool/`** — cache interno do Dart/Flutter (metadados de build, resolução de pacotes).

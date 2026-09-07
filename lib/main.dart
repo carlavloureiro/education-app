@@ -45,12 +45,12 @@ void main() async {
   };
   final q3 = QuestaoMultiplaEscolha.fromMap(dadosJson);
 
-  // Cadastrando as questões no gerenciador em memória
-  gerenciador.cadastrarQuestao(q1);
-  gerenciador.cadastrarQuestao(q2);
-  gerenciador.cadastrarQuestao(q3);
+  // Cadastrando as questões no gerenciador via Spread Operators (... e ...?)
+  final lotePrincipal = [q1, q2];
+  final List<Questao>? loteComplementar = [q3];
+  gerenciador.cadastrarEmLote(lotePrincipal, loteOpcional: loteComplementar);
 
-  print('   -> 3 questões criadas e carregadas na memória com sucesso.\n');
+  print('   -> 3 questões criadas e consolidadas via Spread Operators (... e ...?).\n');
 
   // -----------------------------------------------------------
   // PERSISTÊNCIA LOCAL RELACIONAL (SQLite via FFI)
@@ -83,7 +83,25 @@ void main() async {
 
   // Uso de .fold() para cálculo acumulado de pontuação
   final pontuacaoMaxima = gerenciador.calcularPontuacaoTotalDisponivel();
-  print('   -> Pontuação máxima acumulada no banco (.fold): $pontuacaoMaxima pontos\n');
+  print('   -> Pontuação máxima acumulada no banco (.fold): $pontuacaoMaxima pontos');
+
+  // Uso de .every() e .any()
+  print('   -> Todas as questões têm pontuação positiva (.every): ${gerenciador.todasPossuemPontuacaoValida()}');
+  print('   -> O banco possui questões de nível difícil (.any): ${gerenciador.temQuestoesDificeis()}');
+
+  // Demonstração de Collection-For, Collection-If e Null-aware Spread (...?)
+  print('\n   📋 [CATÁLOGO DE QUESTÕES - Collection-For, Collection-If & Spread]:');
+  final catalogo = gerenciador.gerarCatalogoFormatado(
+    incluirAvisoDificuldade: true,
+    tagsExtras: [
+      '🏷️ [METADADOS]: Simulado Oficial - AP1B',
+      '🏷️ [MODO]: 100% Offline-First',
+    ],
+  );
+  for (final linha in catalogo) {
+    print('      $linha');
+  }
+  print('');
 
   // -----------------------------------------------------------
   // 3. FLUXO ADAPTATIVO, LOGS COM MIXIN E RESTRIÇÃO MÓVEL (Requisitos 2 e 4)
