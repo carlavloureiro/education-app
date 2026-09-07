@@ -32,8 +32,7 @@ O foco central deste primeiro marco é o projeto e a implementação do **Módul
 * **Validação Defensiva e Casos de Borda:** Tratamento rigoroso de exceções customizadas de negócio (`QuizException`) e regras de encapsulamento com `try-on-catch-finally`, garantindo estabilidade e aderência total ao *Sound Null Safety*.
 
 ## Modelagem (Diagrama de Classes)
-<img width="797" height="1059" alt="Diagrama sem nome drawio" src="https://github.com/user-attachments/assets/55731df0-6a0a-43cf-9fca-fe3e0a8d06ba" />
-
+<img width="896" height="1200" alt="diagrama_classes_uml" src="https://github.com/user-attachments/assets/61202f35-6238-4c98-9d26-65e8a3b0be66" />
 
 ## Arquitetura e Tecnologias
 
