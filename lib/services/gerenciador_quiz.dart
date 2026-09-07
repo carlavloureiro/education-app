@@ -53,7 +53,7 @@ class GerenciadorQuiz {
 
       // Collection-If: inclusão condicional de elementos na lista resultante
       if (incluirAvisoDificuldade && temQuestoesDificeis())
-        '⚠️ [AVISO PEDAGÓGICO]: O simulado contém perguntas de nível difícil!',
+        '[AVISO PEDAGÓGICO]: O simulado contém perguntas de nível difícil!',
 
       // Null-aware Spread (...?): mescla coleção extra se não for nula
       ...?tagsExtras,

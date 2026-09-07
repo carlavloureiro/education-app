@@ -14,7 +14,7 @@ class DatabaseHelper {
     }
   }
 
-  /// Retorna a instância do banco de dados (Singleton)
+  /// Retorna a instância do banco de dados 
   static Future<Database> get database async {
     if (_db != null) return _db!;
     _db = await _iniciarBanco();
@@ -56,7 +56,6 @@ class DatabaseHelper {
         'enunciado': q.enunciado,
         'dificuldade': q.dificuldade.name,
         'pontos': q.pontos,
-        // No SQLite salvamos a lista como texto separado por ponto e vírgula
         'opcoes': q.opcoes.join(';'),
         'respostaCorreta': q.respostaCorreta,
       },
