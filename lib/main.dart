@@ -2,7 +2,7 @@
 import 'models/nivel_dificuldade.dart';
 import 'models/questao.dart';
 import 'services/gerenciador_quiz.dart';
-import 'services/database_helper.dart';
+import 'services/dataBase_helper.dart';
 
 void main() async {
   print('====================================================');
@@ -121,8 +121,15 @@ void main() async {
   gerenciador.processarResposta(q3, 'Set');
 
   // Simulação de restrição móvel (offline-first / persistência local em cache)
-  print('\n   [RESTRIÇÃO MÓVEL]: Sincronização offline-first');
-  print('   -> Todas as respostas e pontuações foram retidas localmente em memória e SQLite.');
+  print('\n   [RESTRIÇÃO MÓVEL]: Tentando sincronizar com servidor remoto...');
+  try {
+    gerenciador.sincronizarResultados(conexaoDisponivel: false);
+  } on QuizException catch (e) {
+    String? statusSincronizacao;
+    statusSincronizacao ??=
+        'Modo offline: resultados retidos localmente em cache e SQLite.';
+    print('   -> $statusSincronizacao ($e)');
+  }
 
   // -----------------------------------------------------------
   // 4. RELATÓRIO FORMATADO NO TERMINAL (Requisito 4)

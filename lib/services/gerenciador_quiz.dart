@@ -67,4 +67,18 @@ class GerenciadorQuiz {
       _pontuacaoAluno += questao.pontos;
     }
   }
+
+  void sincronizarResultados({bool conexaoDisponivel = false}) {
+    try {
+      if (!conexaoDisponivel) {
+        throw QuizException(
+          'Falha de conectividade ao sincronizar resultados.',
+        );
+      }
+      print('   -> Resultados sincronizados com o servidor.');
+    } on QuizException catch (e) {
+      print('   [ALERTA] $e');
+      rethrow;
+    }
+  }
 }
