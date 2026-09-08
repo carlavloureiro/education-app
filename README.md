@@ -130,7 +130,17 @@ education_app/
 
 ---
 
-### 1. Arquivo: `lib/models/questao.dart`
+### 1. Configuração de Infraestrutura: Criação do Dockerfile
+* **Estruturação Conceitual (Trabalho do Grupo):**  
+  A equipe definiu a estratégia de padronizar o ambiente de desenvolvimento através de contêineres Docker. O objetivo foi garantir que o projeto pudesse ser executado no terminal (CLI) por todos os membros do grupo e pelo professor de forma isolada, sem conflitos de versão ou exigência de instalações locais complexas.
+* **Assistência da IA (Geração de Script de Infraestrutura):**  
+  A IA foi consultada para gerar o código inicial do `Dockerfile` de forma que atendesse exatamente ao que foi pedido para essa primeira entrega do trabalho. A ferramenta estruturou as camadas do arquivo, incluindo a imagem base do Ubuntu, a instalação do Java, a declaração das variáveis de ambiente e os comandos para download e configuração do Android SDK e do Flutter SDK em modo headless (sem interface gráfica).
+* **Prompt Utilizado:**  
+  > *"Preciso criar um Dockerfile de modo que o contêiner gerado tenha o Flutter e o Android SDK configurados para rodar o projeto, sem precisarmos instalar o Android Studio na máquina."*
+
+---
+
+### 2. Arquivo: `lib/models/questao.dart`
 * **Estruturação Conceitual (Trabalho do Grupo):**  
   A equipe idealizou a hierarquia de classes, criando o enum `NivelDificuldade`, a classe abstrata base `Questao`, o encapsulamento do atributo privado `_pontos` com setter defensivo (rejeitando `<= 0`), e a especialização `QuestaoMultiplaEscolha`. O grupo também implementou um mixin transversal para auditoria com data/hora e de uma exceção própria de domínio (`QuizException`).
 * **Assistência da IA (Aceleração de Boilerplate e Validação Sintática):**  
@@ -140,7 +150,7 @@ education_app/
 
 ---
 
-### 2. Arquivo: `lib/services/gerenciador_quiz.dart`
+### 3. Arquivo: `lib/services/gerenciador_quiz.dart`
 * **Estruturação Conceitual (Trabalho do Grupo):**  
   A equipe projetou o serviço gerenciador para armazenar a lista interna de questões, controlar a pontuação acumulada do estudante e orquestrar a sessão do quiz, incluindo a lógica pedagógica de enquadramento de proficiência (Iniciante, Intermediário e Avançado).
 * **Assistência da IA (Revisão de Código e Validação Sintática):**  
@@ -150,7 +160,7 @@ education_app/
 
 ---
 
-### 3. Arquivo: `lib/main.dart` (CLI Test Runner / Executável de Demonstração)
+### 4. Arquivo: `lib/main.dart` (CLI Test Runner / Executável de Demonstração)
 * **Desenvolvimento Inicial (Trabalho do Grupo):**  
   A equipe iniciou a codificação do arquivo `main.dart` montando um roteiro de testes no console para demonstrar a criação das instâncias, a persistência em banco local, as operações funcionais, a simulação de respostas do aluno e o relatório de proficiência sem depender de interface visual.
 * **Assistência da IA (Auditoria de Conformidade e Revisão Técnica):**  
@@ -159,7 +169,7 @@ education_app/
   > *"A partir do documento enviado, analise o código presente em `lib/main.dart`, faça uma revisão técnica e verifique se está de acordo com as etapas exigidas no documento, apontando eventuais ajustes necessários. Além disso, estruture cabeçalhos e divisores visuais nos prints para que a saída no terminal fique nítida visualmente"*
 ---
 
-### 4. Depuração e Resolução de Erros de Build (Troubleshooting)
+### 5. Depuração e Resolução de Erros de Build (Troubleshooting)
 * **Contexto do Problema (Trabalho do Grupo):**  
   Ao executar `dart run lib/main.dart`, o compilador retornou o erro `Error when reading 'lib/models/quiz_models.dart': No such file or directory`, impedindo a compilação.
 * **Assistência da IA (Diagnóstico Pontual):**  
@@ -169,7 +179,7 @@ education_app/
 
 ---
 
-### 5. Evolução Arquitetural: Persistência Local com SQLite
+### 6. Evolução Arquitetural: Persistência Local com SQLite
 * **Estruturação Conceitual (Trabalho do Grupo):**  
   A equipe decidiu evoluir a persistência temporária em memória para um banco de dados relacional em disco, viabilizando o paradigma *offline-first*.
 * **Assistência da IA (Consulta Técnica de Biblioteca e Revisão de Assinaturas):**  
@@ -179,7 +189,7 @@ education_app/
 
 ---
 
-### 6. Evolução Arquitetural: Persistência Local com SQLite (lib\services\dataBase_helper.dart)
+### 7. Evolução Arquitetural: Persistência Local com SQLite (lib\services\dataBase_helper.dart)
 * **Estruturação Conceitual (Trabalho do Grupo):**  
     Definimos o esquema da tabela `questoes` com as colunas necessárias (`id`, `enunciado`, `dificuldade`, `pontos`, `opcoes`, `respostaCorreta`).
 * **Assistência da IA (Esqueleto de Conexão e Adaptação):**  
@@ -198,7 +208,7 @@ education_app/
 
 ---
 
-### 7. Resolução de Conflito de Resolução de Dependências (Host Windows vs Contêiner Linux)
+### 8. Resolução de Conflito de Resolução de Dependências (Host Windows vs Contêiner Linux)
 * **Momento em que o Erro Surgiu e Motivação da Consulta:**
 O erro surgiu no momento exato em que evoluímos o projeto para a implementação da persistência local em SQLite, adicionando os pacotes `sqflite_common_ffi` e `path` no `pubspec.yaml`. Para fazer o editor de código reconhecer as novas bibliotecas, executamos `flutter pub get` no PowerShell do Windows. Em seguida, ao tentar validar o pipeline no ambiente oficial do grupo (o contêiner Docker Linux) através do comando:
  ```powershell
@@ -216,7 +226,7 @@ Enviamos o log completo do terminal solicitando a causa da falha.
   ```
 
 ---
-### 8. Configuração de Ambiente (flutter doctor -v): Correção do Android Toolchain no Docker
+### 9. Configuração de Ambiente (flutter doctor -v): Correção do Android Toolchain no Docker
 
 **Estruturação Conceitual (Trabalho do Grupo):**
   A equipe decidiu utilizar o Docker para conteinerizar o ambiente de desenvolvimento do projeto em Flutter, garantindo o isolamento das ferramentas e dependências (como o Android SDK) sem a necessidade de instalações locais pesadas na máquina hospedeira.
@@ -229,7 +239,7 @@ Enviamos o log completo do terminal solicitando a causa da falha.
 
 ---
 
-### 9. Documentação Técnica: `README.md`
+### 10. Documentação Técnica: `README.md`
 * **Estruturação Inicial (Trabalho do Grupo):**  
   Os alunos levantaram todas as informações técnicas, decisões de arquitetura, dados dos integrantes e requisitos do edital para compor a documentação.
 * **Assistência da IA (Formatação e Diagramação):**  
