@@ -217,8 +217,20 @@ Enviamos o log completo do terminal solicitando a causa da falha.
   ```
 
 ---
+### 8. Configuração de Ambiente (flutter doctor -v): Correção do Android Toolchain no Docker
 
-### 8. Documentação Técnica: `README.md`
+**Estruturação Conceitual (Trabalho do Grupo):**
+  A equipe decidiu utilizar o Docker para conteinerizar o ambiente de desenvolvimento do projeto em Flutter, garantindo o isolamento das ferramentas e dependências (como o Android SDK) sem a necessidade de instalações locais pesadas na máquina hospedeira.
+
+**Assistência da IA (Resolução de Erros de Ambiente e Infraestrutura):**
+  O grupo consultou a IA enviando os logs de execução do flutter doctor para interpretar o resultado. A dúvida principal era entender e corrigir o alerta ("!") apontado no Android toolchain dentro do contêiner. A IA esclareceu como o isolamento dos sistemas operacionais afeta as exigências do Flutter e indicou a correção exata no Dockerfile (atualizando o Android SDK para a versão 36 e o BuildTools para 28.0.3) para compatibilizar com a versão do Flutter recém-baixada.
+
+**Prompt Utilizado:**
+  >*"Resultado do flutter doctor dentro do container: [log com o "!" no Android toolchain]. Me explique porque"*
+
+---
+
+### 9. Documentação Técnica: `README.md`
 * **Estruturação Inicial (Trabalho do Grupo):**  
   Os alunos levantaram todas as informações técnicas, decisões de arquitetura, dados dos integrantes e requisitos do edital para compor a documentação.
 * **Assistência da IA (Formatação e Diagramação):**  

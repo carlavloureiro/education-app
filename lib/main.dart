@@ -2,7 +2,7 @@
 import 'models/nivel_dificuldade.dart';
 import 'models/questao.dart';
 import 'services/gerenciador_quiz.dart';
-import 'services/dataBase_helper.dart';
+import 'services/database_helper.dart';
 
 void main() async {
   print('====================================================');

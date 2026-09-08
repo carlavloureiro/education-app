@@ -1,27 +1,30 @@
-## Saída do comando "flutter doctor -v"
+## Saída do comando "flutter doctor -v" executado no contêiner:
 
-root@dba1c1db2c8b:/workspace# flutter doctor -v
-[✓] Flutter (Channel stable, 3.47.2, on Ubuntu 22.04.5 LTS 6.18.33.2-microsoft-standard-WSL2, locale en_US) [26ms]
+[✓] Flutter (Channel stable, 3.47.2, on Ubuntu 22.04.5 LTS 6.18.33.2-microsoft-standard-WSL2, locale en_US) [23ms]
     • Flutter version 3.47.2 on channel stable at /opt/flutter
     • Upstream repository https://github.com/flutter/flutter.git
-    • Framework revision d3b14c8769 (4 days ago), 2026-08-26 16:07:51 -0700
+    • Framework revision d3b14c8769 (13 days ago), 2026-08-26 16:07:51 -0700
     • Engine revision a804b26164
     • Dart version 3.13.2
     • DevTools version 2.60.0
-    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets,
-      enable-record-use, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-record-use, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration
 
-[!] Android toolchain - develop for Android devices (Android SDK version 34.0.0) [1,904ms]
+[✓] Android toolchain - develop for Android devices (Android SDK version 34.0.0) [1,166ms]
     • Android SDK at /opt/android-sdk
     • Emulator version unknown
-    ✗ Flutter requires Android SDK 36 and the Android BuildTools 28.0.3
-      To update the Android SDK visit https://flutter.dev/to/linux-android-setup for detailed instructions.
+    • Platform android-36, build-tools 34.0.0
+    • ANDROID_HOME = /opt/android-sdk
+    • ANDROID_SDK_ROOT = /opt/android-sdk
+    • Java binary at: /usr/bin/java
+      This JDK was found in the system PATH.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version OpenJDK Runtime Environment (build 17.0.20+8-1-22.04-Ubuntu)
     • All Android licenses accepted.
 
-[✗] Chrome - develop for the web (Cannot find Chrome executable at google-chrome) [9ms]
+[✗] Chrome - develop for the web (Cannot find Chrome executable at google-chrome) [99ms]
     ! Cannot find Chrome. Try setting CHROME_EXECUTABLE to a Chrome executable.
 
-[✗] Linux toolchain - develop for Linux desktop [23ms]
+[✗] Linux toolchain - develop for Linux desktop [107ms]
     ✗ clang++ is required for Linux development.
       It is likely available from your distribution (e.g.: apt install clang), or can be downloaded from https://releases.llvm.org/
     ✗ CMake is required for Linux development.
@@ -31,13 +34,13 @@ root@dba1c1db2c8b:/workspace# flutter doctor -v
     ✗ pkg-config is required for Linux development.
       It is likely available from your distribution (e.g.: apt install pkg-config), or can be downloaded from https://www.freedesktop.org/wiki/Software/pkg-config/
 
-[✓] Connected device (1 available) [57ms]
+[✓] Connected device (1 available) [138ms]
     • Linux (desktop) • linux • linux-x64 • Ubuntu 22.04.5 LTS 6.18.33.2-microsoft-standard-WSL2
 
-[✓] Network resources [557ms]
+[✓] Network resources [398ms]
     • All expected network resources are available.
 
-! Doctor found issues in 3 categories.
+! Doctor found issues in 2 categories.
 
 ## Estruturação do Repositório Git
 
