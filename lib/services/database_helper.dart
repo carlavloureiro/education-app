@@ -1,3 +1,5 @@
+// Helper SQLite do CLI da AP1B (bin/main.dart). Usa sqflite_common_ffi porque
+// o CLI roda com "dart run", sem Flutter. O app Flutter usa lib/datasources/quiz_dao.dart.
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -14,12 +16,9 @@ class DatabaseHelper {
     }
   }
 
-  /// Retorna a instância do banco de dados 
-  static Future<Database> get database async {
-    if (_db != null) return _db!;
-    _db = await _iniciarBanco();
-    return _db!;
-  }
+  /// Retorna a instância do banco de dados (??= abre só na primeira chamada,
+  /// sem precisar do operador ! forçado).
+  static Future<Database> get database async => _db ??= await _iniciarBanco();
 
   /// Cria o arquivo do banco e a tabela de questões
   static Future<Database> _iniciarBanco() async {
@@ -49,18 +48,14 @@ class DatabaseHelper {
   /// Salva uma questão no SQLite
   static Future<void> inserirQuestao(QuestaoMultiplaEscolha q) async {
     final db = await database;
-    await db.insert(
-      'questoes',
-      {
-        'id': q.id,
-        'enunciado': q.enunciado,
-        'dificuldade': q.dificuldade.name,
-        'pontos': q.pontos,
-        'opcoes': q.opcoes.join(';'),
-        'respostaCorreta': q.respostaCorreta,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert('questoes', {
+      'id': q.id,
+      'enunciado': q.enunciado,
+      'dificuldade': q.dificuldade.name,
+      'pontos': q.pontos,
+      'opcoes': q.opcoes.join(';'),
+      'respostaCorreta': q.respostaCorreta,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   /// Busca todas as questões salvas no SQLite e converte para objetos Dart
@@ -72,6 +67,8 @@ class DatabaseHelper {
       return QuestaoMultiplaEscolha.fromMap({
         'id': map['id'],
         'enunciado': map['enunciado'],
+        'dificuldade':
+            map['dificuldade'], // AP2B: fromMap agora lê a dificuldade
         'pontos': map['pontos'],
         'opcoes': (map['opcoes'] as String).split(';'),
         'respostaCorreta': map['respostaCorreta'],
