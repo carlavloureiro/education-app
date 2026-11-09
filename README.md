@@ -267,7 +267,6 @@ Esta seção presta contas do uso de IA nos dois marcos. O log detalhado dos pro
 | Ferramenta | Etapas em que atuou |
 |---|---|
 | **Claude Code** (Anthropic, modelo Claude Opus 5.5), via extensão do VS Code | Geração inicial do código da AP2B (evolução dos modelos, DAO, repositório, mock da API, telas, rotas e testes); geração dos dados mock (as 10 questões de `MockApi.questoes`); depuração (um teste de ponta a ponta temporário revelou um `setState` que retornava `Future` em três telas, e a IA corrigiu); revisão de boas práticas guiada pelo analisador (`dart analyze`); redação desta documentação, do `PROMPTS.md` e da atualização do `ENVIRONMENT_REPORT.md`. |
-| [CONFIRMAR: outras ferramentas usadas de fato na AP2B, como Cursor ou Devin, com as etapas em que atuaram; se nenhuma, remover esta linha] | [CONFIRMAR] |
 
 #### 2. Fluxo de trabalho (spec-driven development)
 
