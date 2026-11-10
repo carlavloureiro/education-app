@@ -274,19 +274,8 @@ Os requisitos foram definidos em etapas. Primeiro vieram os modelos e as regras 
 
 O grupo revisou o código gerado, testou no emulador e pediu correções em novos prompts. [CONFIRMAR: o grupo descreve as rodadas reais de revisão e correção, ou ajusta este parágrafo se elas não aconteceram.]
 
-#### 3. Participação ativa do grupo
 
-- Definiu os requisitos e os critérios de aceite da AP2B a partir do PDF da avaliação (registrados no prompt consolidado do `PROMPTS.md`).
-- Revisou o código gerado arquivo por arquivo. [CONFIRMAR: o grupo marca se fez e adapta o texto]
-- Executou `flutter test` e depurou falhas. [CONFIRMAR: o grupo marca se fez e adapta o texto]
-- Fez ajustes manuais no código (detalhados na tabela abaixo). [CONFIRMAR: o grupo marca se fez e adapta o texto]
-- Validou o comportamento offline no emulador: Switch "Simular offline", partida pendente e ressincronização. [CONFIRMAR: o grupo marca se fez e adapta o texto]
-
-#### 4. Autoria cognitiva
-
-A autoria cognitiva do projeto é do grupo. Todos os integrantes são capazes de explicar, depurar e modificar qualquer trecho do código na entrevista técnica. A IA acelerou a implementação, mas as decisões de arquitetura foram do grupo: padrão Repository, SQLite como fonte única da verdade, uso de serviço mock em vez de API pública, exatamente 10 rotas e entrega dos mínimos exatos pedidos no PDF. A validação final também é responsabilidade do grupo.
-
-#### 5. Limites e verificação
+#### 2. Limites e verificação
 
 Os resultados dos testes devem ser verificados executando `flutter test`. Esta declaração não informa cobertura nem outras métricas que esse comando não reproduza. O comportamento no emulador (modo offline e ressincronização) deve ser conferido manualmente seguindo o roteiro em "Como demonstrar o modo offline".
 
