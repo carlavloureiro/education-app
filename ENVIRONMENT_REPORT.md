@@ -42,53 +42,61 @@
 
 ! Doctor found issues in 2 categories.
 
+> **AP1B:** a saída acima foi gerada no contêiner Docker do grupo durante o Marco 1 e foi mantida sem alterações.
+>
+> **AP2B:** [CONFIRMAR: o grupo roda `flutter doctor -v` de novo no ambiente usado para a AP2B (contêiner ou máquina com emulador Android) e cola a saída integral aqui, de preferência mostrando o emulador em "Connected device".]
+
+## Evolução do ambiente na AP2B
+
+- **Novas dependências** (`pubspec.yaml`): `sqflite` (SQLite no dispositivo), `http` (cliente REST, incluindo o `MockClient` de `package:http/testing.dart`) e `shared_preferences` (data/hora da última sincronização). Da AP1B foram mantidos `path` e `sqflite_common_ffi`, este último usado só pelo CLI `bin/main.dart`, que roda com `dart run` (sem Flutter).
+- **Pacote renomeado** de `workspace` para `quiz_adaptativo` (os imports dos testes usam `package:quiz_adaptativo/...`).
+- **Verificação durante o desenvolvimento** (Windows 11, Flutter 3.47.9 / Dart 3.13.7): `flutter pub get`, `dart format .`, `dart analyze` (sem problemas), `flutter test` e `dart run bin/main.dart`. Os resultados devem ser reproduzidos pelo grupo com esses mesmos comandos.
+
 ## Estruturação do Repositório Git
 
 ### Estrutura do Projeto
 
-O projeto adota uma arquitetura em camadas modular e desacoplada em Dart puro, separando as entidades de domínio, a camada de serviços/persistência e o executável de demonstração em console:
+Arquitetura em camadas com padrão Repository (detalhes no `README.md`):
 
 ```text
-education_app/
-├── .devcontainer/                # Configurações do ambiente de desenvolvimento integrado (VS Code)
-│   └── devcontainer.json
-├── .gitignore                    # Regras de exclusão de artefatos de build, caches e arquivos de IDE
-├── Dockerfile                    # Receita do contêiner reproduzível (Ubuntu 22.04, JDK 17, Flutter SDK)
-├── ENVIRONMENT_REPORT.md         # Diagnóstico do ambiente (flutter doctor -v) e justificativas do Git
-├── README.md                     # Documentação técnica oficial e declaração obrigatória de IA
-├── ROTEIRO_APRESENTACAO.md       # Guia e roteiro de apresentação com divisão de falas por integrante
-├── analysis_options.yaml         # Regras estáticas do linter oficial (flutter_lints)
-├── pubspec.yaml                  # Metadados do projeto, dependências (SQLite FFI, path) e SDK
-├── quiz_app.db                   # Banco de dados relacional SQLite local em disco (Offline-first)
-│
+education-app/
+├── .devcontainer/devcontainer.json   # Ambiente de desenvolvimento em contêiner (VS Code)
+├── .gitignore                        # Exclusão de artefatos de build, caches e arquivos de IDE
+├── Dockerfile                        # Contêiner reproduzível (Ubuntu 22.04, JDK 17, Flutter SDK)
+├── ENVIRONMENT_REPORT.md             # Este arquivo
+├── PROMPTS.md                        # Log dos prompts usados com IA (AP2B)
+├── README.md                         # Documentação e Declaração de Uso de IA
+├── analysis_options.yaml             # Regras do linter (flutter_lints)
+├── pubspec.yaml                      # Dependências e SDK
+├── quiz_app.db                       # Banco SQLite do CLI da AP1B (gerado pelo bin/main.dart)
+├── bin/main.dart                     # CLI Test Runner da AP1B
 ├── lib/
-│   ├── main.dart                 # Ponto de entrada da aplicação e CLI Test Runner (5 etapas)
-│   │
-│   ├── models/                   # Camada de Domínio (Entidades, Contratos e Regras Base)
-│   │   ├── nivel_dificuldade.dart # Enum tipado com os níveis (fácil, médio, difícil) e parsers
-│   │   └── questao.dart          # Classe abstrata Questao, QuestaoMultiplaEscolha,
-│   │                             # LogAuditoriaMixin e QuizException
-│   │
-│   └── services/                 # Camada de Serviços, Lógica de Negócios e Persistência Local
-│       ├── database_helper.dart  # Conexão SQLite (sqflite_common_ffi), DDL e operações CRUD
-│       └── gerenciador_quiz.dart # Motor do quiz com coleções funcionais (.where e .fold)
-│
-└── test/                         # Diretório de testes automatizados
+│   ├── main.dart                     # Entrada do app Flutter (injeção de dependências)
+│   ├── app.dart                      # MaterialApp (Material 3) e roteamento das 10 rotas
+│   ├── routes.dart                   # Nomes das 10 rotas
+│   ├── models/                       # Domínio em Dart puro (Questao, Partida, enum, exceções)
+│   ├── services/                     # Regras da AP1B (GerenciadorQuiz) e helper SQLite do CLI
+│   ├── datasources/                  # Interface local, DAO sqflite + prefs, API simulada
+│   ├── repositories/                 # QuizRepository (Offline-First)
+│   ├── screens/                      # 10 telas
+│   └── widgets/                      # Componentes reutilizáveis
+└── test/                             # 20 testes de unidade + 5 de widget (+ fakes/)
 ```
 
 ### Itens ignorados
 
-- **`.dart_tool/`** — cache interno do Dart/Flutter (metadados de build, resolução de pacotes).
-- **`.packages`** — arquivo legado de mapeamento de pacotes, substituído pelo `.dart_tool/package_config.json`.
-- **`build/`** — diretório de saída de compilação (inclui os APKs gerados em `build/app/outputs/flutter-apk/`).
-- **`.flutter-plugins`** e **`.flutter-plugins-dependencies`** — arquivos de cache de plugins, regenerados a cada `flutter pub get`.
-- **`*.lock`** (exceto `pubspec.lock`) — arquivos de bloqueio temporários.
-- **Artefatos de IDE** (`.idea/`, `.vscode/`, `*.iml`) — configurações locais específicas de cada desenvolvedor.
-- **Arquivos de sistema operacional** (`.DS_Store`).
+- **`.dart_tool/`**: cache interno do Dart/Flutter (metadados de build, resolução de pacotes).
+- **`.packages`**: arquivo legado de mapeamento de pacotes, substituído pelo `.dart_tool/package_config.json`.
+- **`build/`**: saída de compilação (inclui os APKs em `build/app/outputs/flutter-apk/`).
+- **`.flutter-plugins`** e **`.flutter-plugins-dependencies`**: cache de plugins, regenerado a cada `flutter pub get`.
+- **`.pub-cache/`, `.pub/`, `coverage/`, `*.log`, `*.tmp`**: caches de pacotes, relatórios de cobertura e temporários.
+- **`*.lock`** (exceto `pubspec.lock`): arquivos de bloqueio temporários.
+- **Pods do iOS/macOS** e **artefatos de IDE** (`.idea/`, `.vscode/`, `*.iml`).
+- **Arquivos de sistema operacional** (`.DS_Store`, `Thumbs.db`).
 
 ### Justificativa
 
-Esses diretórios e arquivos são **derivados** — ou seja, podem ser recriados a qualquer momento a partir do `pubspec.yaml` e do código-fonte via `flutter pub get` e `flutter build`. Versioná-los:
+Esses diretórios e arquivos são **derivados**, ou seja, podem ser recriados a qualquer momento a partir do `pubspec.yaml` e do código-fonte via `flutter pub get` e `flutter build`. Versioná-los:
 
 - infla desnecessariamente o histórico do repositório;
 - gera conflitos de merge irrelevantes entre membros do grupo;
@@ -99,23 +107,36 @@ Esses diretórios e arquivos são **derivados** — ou seja, podem ser recriados
 ```gitignore
 # Flutter/Dart
 .dart_tool/
-.packages
 .flutter-plugins
 .flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
 build/
+coverage/
 *.lock
 !pubspec.lock
+
+# Temporários e logs
+*.log
+*.tmp
 
 # Android
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
 **/android/local.properties
 
+# iOS / macOS
+**/ios/Pods/
+**/ios/.symlinks/
+**/macos/Pods/
+
 # IDE
 .idea/
 .vscode/
 *.iml
 
-# Sistema
+# Sistema operacional
 .DS_Store
+Thumbs.db
 ```

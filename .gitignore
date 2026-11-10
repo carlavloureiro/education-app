@@ -3,19 +3,32 @@
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
+.pub-cache/
+.pub/
 build/
+coverage/
 *.lock
 !pubspec.lock
+
+# Temporários e logs
+*.log
+*.tmp
 
 # Android
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
 **/android/local.properties
 
+# iOS / macOS
+**/ios/Pods/
+**/ios/.symlinks/
+**/macos/Pods/
+
 # IDE
 .idea/
 .vscode/
 *.iml
 
-# macOS/Linux
+# Sistema operacional
 .DS_Store
+Thumbs.db

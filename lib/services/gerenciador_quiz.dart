@@ -12,20 +12,20 @@ class GerenciadorQuiz {
   }
 
   /// Cadastro em lote demonstrando Spread Operator (...) e Null-aware Spread (...?)
-  void cadastrarEmLote(List<Questao> loteObrigatorio, {List<Questao>? loteOpcional}) {
-    final consolidada = [
-      ...loteObrigatorio,
-      ...?loteOpcional,
-    ];
+  void cadastrarEmLote(
+    List<Questao> loteObrigatorio, {
+    List<Questao>? loteOpcional,
+  }) {
+    final consolidada = [...loteObrigatorio, ...?loteOpcional];
     _questoes.addAll(consolidada);
   }
 
-  /// Filtro funcional com .where() 
+  /// Filtro funcional com .where()
   List<Questao> obterPorDificuldade(NivelDificuldade dificuldade) {
     return _questoes.where((q) => q.dificuldade == dificuldade).toList();
   }
 
-  /// Cálculo funcional com .fold() 
+  /// Cálculo funcional com .fold()
   int calcularPontuacaoTotalDisponivel() {
     if (_questoes.isEmpty) return 0;
     return _questoes.fold<int>(0, (soma, q) => soma + q.pontos);
@@ -60,12 +60,22 @@ class GerenciadorQuiz {
     ];
   }
 
-  /// Lógica simples: acertos somam pontos
-  void processarResposta(Questao questao, String resposta) {
+  /// Lógica simples: acertos somam pontos.
+  /// AP2B: passa a retornar se acertou (a tela de jogo usa para o feedback).
+  bool processarResposta(Questao questao, String resposta) {
     final acertou = questao.responder(resposta);
     if (acertou) {
       _pontuacaoAluno += questao.pontos;
     }
+    return acertou;
+  }
+
+  /// Classificação de proficiência adaptativa (mesmas faixas da AP1B).
+  /// AP2B: extraída do CLI para ser reutilizada pelo app e pelos testes.
+  static String classificarProficiencia(double percentual) {
+    if (percentual >= 70) return 'Avançado';
+    if (percentual >= 40) return 'Intermediário';
+    return 'Iniciante';
   }
 
   void sincronizarResultados({bool conexaoDisponivel = false}) {
