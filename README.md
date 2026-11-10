@@ -275,7 +275,7 @@ Os requisitos foram definidos em etapas. Primeiro vieram os modelos e as regras 
 O grupo revisou o código gerado, testou no emulador e pediu correções em novos prompts. [CONFIRMAR: o grupo descreve as rodadas reais de revisão e correção, ou ajusta este parágrafo se elas não aconteceram.]
 
 
-#### 2. Limites e verificação
+#### 3. Limites e verificação
 
 Os resultados dos testes devem ser verificados executando `flutter test`. Esta declaração não informa cobertura nem outras métricas que esse comando não reproduza. O comportamento no emulador (modo offline e ressincronização) deve ser conferido manualmente seguindo o roteiro em "Como demonstrar o modo offline".
 
